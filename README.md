@@ -24,7 +24,7 @@ Then run `composer install`
 [Swagger UI](https://swagger.io/tools/swagger-ui/) is a tool to visualize and interact with OpenAPI Specifications. This example will use the [swaggerapi/swagger-ui](https://hub.docker.com/r/swaggerapi/swagger-ui/) Docker image to generate the Swagger UI web interface.
 
 ```bash
-$ docker run -d -p 80:8080 -e SWAGGER_JSON=/app/sites-api.yaml -v ${PWD}:/app swaggerapi/swagger-ui
+$ docker run -d -p 80:8080 -e SWAGGER_JSON=/app/IncapsulaAPIv1.yaml -v ${PWD}:/app swaggerapi/swagger-ui
 ```
 
 ## Contribution
