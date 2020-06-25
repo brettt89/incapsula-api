@@ -1,0 +1,279 @@
+PerformanceConfig:
+  type: object
+  properties:
+    advanced_caching_rules:
+      type: object
+      properties:
+        never_cache_resources:
+          type: array
+          items:
+            type: object
+            properties:
+              pattern:
+                type: string
+              url:
+                type: string
+        always_cache_resources:
+          type: array
+          items:
+            type: object
+            properties:
+              pattern:
+                type: string
+              url:
+                type: string
+              ttl:
+                type: integer
+              ttlUnits:
+                type: string
+    acceleration_level:
+      type: string
+    async_validation:
+      type: boolean
+    minify_javascript:
+      type: boolean
+    minify_css:
+      type: boolean
+    minify_static_html:
+      type: boolean
+    compress_jpeg:
+      type: boolean
+    progressive_image_rendering:
+      type: boolean
+    aggressive_compression:
+      type: boolean
+    compress_png:
+      type: boolean
+    on_the_fly_compression:
+      type: boolean
+    tcp_pre_pooling:
+      type: boolean
+    comply_no_cache:
+      type: boolean
+    comply_vary:
+      type: boolean
+    use_shortest_caching:
+      type: boolean
+    prefer_last_modified:
+      type: boolean
+    disable_client_side_caching:
+      type: boolean
+    cache300x:
+      type: boolean
+    cache_headers:
+      type: array
+      items:
+        type: object
+        properties:
+          headerName:
+            type: string
+    incap_rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/IncapRule'
+
+Security:
+  type: object
+  properties:
+    waf:
+      type: object
+      required:
+        - rules
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/WAFRule'
+    acls:
+      type: object
+      required:
+        - rules
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ACLRule'
+
+SSLConfig:
+  type: object
+  properties:
+    origin_server:
+      type: object
+      properties:
+        detected:
+          type: boolean
+        detectionStatus:
+          type: string
+    generated_certificate:
+      type: object
+      properties:
+        ca:
+          type: string
+        validation_method:
+          type: string
+        validation_data:
+          type: array
+          items:
+            type: object
+            properties:
+              dns_record_name:
+                type: string
+              set_type_to:
+                type: string
+              set_data_to:
+                type: array
+                items:
+                  type: string
+        san:
+          type: array
+          items:
+            type: string
+        validation_status:
+          type: string
+    custom_certificate:
+      type: object
+      properties:
+        active:
+          type: boolean
+        expirationDate:
+          type: integer
+        revocationError:
+          type: boolean
+        validityError:
+          type: boolean
+        chainError:
+          type: boolean
+        hostnameMismatchError:
+          type: boolean
+
+DNS:
+  type: object
+  required:
+    - dns_record_name
+    - set_type_to
+    - set_data_to
+  properties:
+    dns_record_name:
+      type: string
+    set_type_to:
+      type: string
+    set_data_to:
+      type: array
+      items:
+        type: string
+
+components:
+  schemas:
+    ACLRule:
+      type: object
+      required:
+        - rules
+      properties:
+        rules:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - ips
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              ips:
+                type: array
+                items:
+                  type: string
+              exceptions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exception'
+
+    IncapRule:
+      type: object
+      required:
+        - id
+        - name
+        - action
+        - creation_date
+        - rule
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        action:
+          type: string
+        creation_date:
+          type: integer
+        rule:
+          type: string
+
+    WAFRule:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        action:
+          type: string
+        action_text:
+          type: string
+        block_bad_bots:
+          type: boolean
+        challenge_suspected_bots:
+          type: boolean
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Exception'
+        activation_mode:
+          type: string
+        activation_mode_text:
+          type: string
+        ddos_traffic_threshold:
+          type: string
+        ddos_traffic_threshold_text:
+          type: string
+
+    Exception:
+      type: object
+      required:
+        - res
+        - id
+        - values
+      properties:
+        res:
+          type: integer
+        id:
+          type: integer
+        values:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              urls:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - value
+                    - pattern
+                  properties:
+                    value:
+                      type: string
+                    pattern:
+                      type: string

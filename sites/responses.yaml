@@ -1,0 +1,127 @@
+Site:
+  type: object
+  required:
+    - site_id
+    - status
+    - domain
+  properties:
+    site_id:
+      type: integer
+    status:
+      type: string
+    statusEnum:
+      type: string
+    domain:
+      type: string
+    account_id:
+      type: integer
+    acceleration_level:
+      type: string
+    site_creation_date:
+      type: integer
+    ips:
+      type: array
+      items:
+        type: string
+    dns:
+      type: array
+      items:
+        $ref: './schemas.yaml#/DNS'
+    original_dns:
+      type: array
+      items:
+        $ref: './schemas.yaml#/DNS'
+    warnings:
+      type: array
+      items:
+        type: object
+    active:
+      type: string
+    support_all_tls_versions:
+      type: boolean
+    use_wildcard_san_instead_of_full_domain_san:
+      type: boolean
+    add_naked_domain_san:
+      type: boolean
+    additionalErrors:
+      type: array
+      items:
+        type: object
+    display_name:
+      type: string
+    security:
+      $ref: './schemas.yaml#/Security'
+    sealLocation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    ssl:
+      $ref: './schemas.yaml#/SSLConfig'
+    siteDualFactorSettings:
+      type: object
+      properties:
+        specificUsers:
+          type: array
+          items:
+            type: object
+        enabled:
+          type: boolean
+        customAreas:
+          type: array
+          items:
+            type: object
+        customAreasExceptions:
+          type: array
+          items:
+            type: object
+        allowAllUsers:
+          type: boolean
+        shouldSuggestApplicatons:
+          type: boolean
+        allowedMedia:
+          type: array
+          items:
+            type: string
+        shouldSendLoginNotifications:
+          type: boolean
+        version:
+          type: integer
+    login_protect:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        specific_users_list:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              name:
+                type: string
+              status:
+                type: string
+        send_lp_notifications:
+          type: boolean
+        allow_all_users:
+          type: boolean
+        authentication_methods:
+          type: array
+          items:
+            type: string
+        urls:
+          type: array
+          items:
+            type: string
+        url_patterns:
+          type: array
+          items:
+            type: string
+    performance_configuration:
+      $ref: './schemas.yaml#/PerformanceConfig'
+    extended_ddos:
+      type: integer

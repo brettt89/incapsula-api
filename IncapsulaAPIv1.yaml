@@ -1,0 +1,22 @@
+openapi: 3.0.2
+info:
+  title: Imperva APIv1
+  description: Imperva APIv1
+  version: 0.0.1
+  contact:
+    email: brett.tasker@gmail.com
+externalDocs:
+  description: Imperva APIv1 Documentation
+  url: https://docs.imperva.com/bundle/cloud-application-security/page/api/api.htm
+servers: 
+  - url: https://my.imperva.com/api/prov/v1
+tags:
+  - name: sites
+    description: Site Management API
+    externalDocs:
+      url: https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm
+paths:
+  /sites/status:
+    $ref: 'sites/paths.yaml#/getStatus'
+  /sites/add:
+    $ref: 'sites/paths.yaml#/createSite'

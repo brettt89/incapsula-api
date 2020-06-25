@@ -1,0 +1,12 @@
+Success:
+  type: object
+  required:
+    - res
+    - res_message
+  properties:
+    res:
+      type: integer
+    res_message:
+      type: string
+    debug_info:
+      type: object
