@@ -7,7 +7,7 @@ info:
     email: brett.tasker@gmail.com
 externalDocs:
   description: Imperva APIv1 Documentation
-  url: https://docs.imperva.com/bundle/cloud-application-security/page/api/api.htm
+  url: /docs
 servers: 
   - url: https://my.imperva.com/api/prov/v1
 tags:
@@ -15,8 +15,39 @@ tags:
     description: Site Management API
     externalDocs:
       url: https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: query
+      name: api_key
+    appId:
+      type: apiKey
+      in: query
+      name: api_id
+security:
+  - apiKey: []
+    appId:  []
 paths:
   /sites/status:
-    $ref: 'sites/paths.yaml#/getStatus'
+    $ref: 'sites/requests.yaml#/getStatus'
   /sites/add:
-    $ref: 'sites/paths.yaml#/createSite'
+    $ref: 'sites/requests.yaml#/addSite'
+  /domain/emails:
+    $ref: 'sites/requests.yaml#/getDomainApproverEmails'
+  /sites/configure:
+    $ref: 'sites/requests.yaml#/modifySiteConfig'
+  /performance/response-headers:
+    $ref: 'sites/requests.yaml#/modifyResponseHeaders'
+  /performance/response-headers/get:
+    $ref: 'sites/requests.yaml#/getResponseHeaders'
+  /performance/tag-response:
+    $ref: 'sites/requests.yaml#/modifyTaggedResponseHeader'
+  /performance/tag-response/get:
+    $ref: 'sites/requests.yaml#/getTaggedResponseHeader'
+  /hostname/purge:
+    $ref: 'sites/requests.yaml#/purgeHostname'
+  /xray/get-link:
+    $ref: 'sites/requests.yaml#/getXrayLink'
+  /caching-rules/add:
+    $ref: 'sites/requests.yaml#/addCacheRule'

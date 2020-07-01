@@ -1,0 +1,99 @@
+URL:
+  type: object
+  properties:
+    url:
+      type: string
+
+TaggedResponseHeader:
+  type: object
+  properties:
+    header:
+      type: string
+
+ResponseHeaders:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    mode:
+      type: string
+    custom_headers:
+      type: array
+      items:
+        type: string
+
+Site:
+  type: object
+  required:
+    - site_id
+    - status
+    - domain
+  properties:
+    site_id:
+      type: integer
+    status:
+      type: string
+    statusEnum:
+      type: string
+    domain:
+      type: string
+    account_id:
+      type: integer
+    acceleration_level:
+      type: string
+    site_creation_date:
+      type: integer
+    ips:
+      type: array
+      items:
+        type: string
+    dns:
+      type: array
+      items:
+        $ref: './schemas.yaml#/components/schemas/DNS'
+    original_dns:
+      type: array
+      items:
+        $ref: './schemas.yaml#/components/schemas/DNS'
+    warnings:
+      type: array
+      items:
+        $ref: './schemas.yaml#/Warning'
+    active:
+      type: string
+    support_all_tls_versions:
+      type: boolean
+    use_wildcard_san_instead_of_full_domain_san:
+      type: boolean
+    add_naked_domain_san:
+      type: boolean
+    additionalErrors:
+      type: array
+      items:
+        type: object
+    display_name:
+      type: string
+    security:
+      $ref: './schemas.yaml#/Security'
+    sealLocation:
+      type: object
+    ssl:
+      $ref: './schemas.yaml#/SSLConfig'
+    siteDualFactorSettings:
+      $ref: './schemas.yaml#/DualFactorSettings'
+    login_protect:
+      $ref: './schemas.yaml#/LoginProtect'
+    performance_configuration:
+      $ref: './schemas.yaml#/PerformanceConfig'
+    extended_ddos:
+      type: integer
+
+DomainEmails:
+  type: object
+  required:
+    - domain_emails
+  properties:
+    domain_emails:
+      type: array
+      items:
+        type: string

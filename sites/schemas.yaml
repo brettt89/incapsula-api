@@ -2,30 +2,7 @@ PerformanceConfig:
   type: object
   properties:
     advanced_caching_rules:
-      type: object
-      properties:
-        never_cache_resources:
-          type: array
-          items:
-            type: object
-            properties:
-              pattern:
-                type: string
-              url:
-                type: string
-        always_cache_resources:
-          type: array
-          items:
-            type: object
-            properties:
-              pattern:
-                type: string
-              url:
-                type: string
-              ttl:
-                type: integer
-              ttlUnits:
-                type: string
+      $ref: '#/components/schemas/AdvancedCachingRules'
     acceleration_level:
       type: string
     async_validation:
@@ -63,10 +40,7 @@ PerformanceConfig:
     cache_headers:
       type: array
       items:
-        type: object
-        properties:
-          headerName:
-            type: string
+        $ref: '#/components/schemas/Header'
     incap_rules:
       type: array
       items:
@@ -76,61 +50,94 @@ Security:
   type: object
   properties:
     waf:
-      type: object
-      required:
-        - rules
-      properties:
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/WAFRule'
+      $ref: '#/components/schemas/WAFRules'
     acls:
-      type: object
-      required:
-        - rules
-      properties:
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ACLRule'
+      $ref: '#/components/schemas/ACLRules'
 
 SSLConfig:
   type: object
   properties:
     origin_server:
-      type: object
-      properties:
-        detected:
-          type: boolean
-        detectionStatus:
-          type: string
+      $ref: '#/components/schemas/OriginServer'
     generated_certificate:
-      type: object
-      properties:
-        ca:
-          type: string
-        validation_method:
-          type: string
-        validation_data:
-          type: array
-          items:
-            type: object
-            properties:
-              dns_record_name:
-                type: string
-              set_type_to:
-                type: string
-              set_data_to:
-                type: array
-                items:
-                  type: string
-        san:
-          type: array
-          items:
-            type: string
-        validation_status:
-          type: string
+      $ref: '#/components/schemas/GeneratedCertificate'
     custom_certificate:
+      $ref: '#/components/schemas/CustomCertificate'
+
+Warning:
+  type: object
+  properties:
+    type:
+      type: string
+    dns_record_name:
+      type: string
+    mail_record_name:
+      type: string
+    set_type_to:
+      type: string
+    set_data_to:
+      type: string
+
+DualFactorSettings:
+  type: object
+  properties:
+    specificUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    enabled:
+      type: boolean
+    customAreas:
+      type: array
+      items:
+        type: object
+    customAreasExceptions:
+      type: array
+      items:
+        type: object
+    allowAllUsers:
+      type: boolean
+    shouldSuggestApplicatons:
+      type: boolean
+    allowedMedia:
+      type: array
+      items:
+        type: string
+    shouldSendLoginNotifications:
+      type: boolean
+    version:
+      type: integer
+
+LoginProtect:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    specific_users_list:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    send_lp_notifications:
+      type: boolean
+    allow_all_users:
+      type: boolean
+    authentication_methods:
+      type: array
+      items:
+        type: string
+    urls:
+      type: array
+      items:
+        type: string
+    url_patterns:
+      type: array
+      items:
+        type: string
+
+components:
+  schemas:
+
+    CustomCertificate:
       type: object
       properties:
         active:
@@ -146,25 +153,112 @@ SSLConfig:
         hostnameMismatchError:
           type: boolean
 
-DNS:
-  type: object
-  required:
-    - dns_record_name
-    - set_type_to
-    - set_data_to
-  properties:
-    dns_record_name:
-      type: string
-    set_type_to:
-      type: string
-    set_data_to:
-      type: array
-      items:
-        type: string
+    DNS:
+      type: object
+      required:
+        - dns_record_name
+        - set_type_to
+        - set_data_to
+      properties:
+        dns_record_name:
+          type: string
+        set_type_to:
+          type: string
+        set_data_to:
+          type: array
+          items:
+            type: string
 
-components:
-  schemas:
+    GeneratedCertificate:
+      type: object
+      properties:
+        ca:
+          type: string
+        validation_method:
+          type: string
+        validation_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DNS'
+        san:
+          type: array
+          items:
+            type: string
+        validation_status:
+          type: string
+
+    OriginServer:
+      type: object
+      properties:
+        detected:
+          type: boolean
+        detectionStatus:
+          type: string
+
+    Header:
+      type: object
+      properties:
+        headerName:
+          type: string
+
+    CacheResource:
+      type: object
+      properties:
+        pattern:
+          type: string
+        url:
+          type: string
+        ttl:
+          type: integer
+        ttlUnits:
+          type: string
+
+    AdvancedCachingRules:
+      type: object
+      properties:
+        never_cache_resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/CacheResource'
+        always_cache_resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/CacheResource'
+              
+    User:
+      type: object
+      required:
+        - email
+        - name
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+
     ACLRule:
+      type: object
+      required:
+        - id
+        - name
+        - ips
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        ips:
+          type: array
+          items:
+            type: string
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Exception'
+
+    ACLRules:
       type: object
       required:
         - rules
@@ -172,24 +266,7 @@ components:
         rules:
           type: array
           items:
-            type: object
-            required:
-              - id
-              - name
-              - ips
-            properties:
-              id:
-                type: string
-              name:
-                type: string
-              ips:
-                type: array
-                items:
-                  type: string
-              exceptions:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Exception'
+            $ref: '#/components/schemas/ACLRule'
 
     IncapRule:
       type: object
@@ -210,6 +287,16 @@ components:
           type: integer
         rule:
           type: string
+
+    WAFRules:
+      type: object
+      required:
+        - rules
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/WAFRule'
 
     WAFRule:
       type: object
