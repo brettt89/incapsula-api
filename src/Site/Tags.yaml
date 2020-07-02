@@ -1,0 +1,5 @@
+tags:
+  - name: Site
+    description: Site Management API
+    externalDocs:
+      url: https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm

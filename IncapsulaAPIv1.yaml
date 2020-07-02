@@ -1,3 +1,4 @@
+---
 openapi: 3.0.2
 info:
   title: Imperva APIv1
@@ -7,47 +8,562 @@ info:
     email: brett.tasker@gmail.com
 externalDocs:
   description: Imperva APIv1 Documentation
-  url: /docs
-servers: 
-  - url: https://my.imperva.com/api/prov/v1
+  url: "/docs"
+servers:
+- url: https://my.imperva.com/api/prov/v1
 tags:
-  - name: sites
-    description: Site Management API
-    externalDocs:
-      url: https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm
-components:
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: query
-      name: api_key
-    appId:
-      type: apiKey
-      in: query
-      name: api_id
-security:
-  - apiKey: []
-    appId:  []
+- name: Site
+  description: Site Management API
+  externalDocs:
+    url: https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm
 paths:
-  /sites/status:
-    $ref: 'sites/requests.yaml#/getStatus'
-  /sites/add:
-    $ref: 'sites/requests.yaml#/addSite'
-  /domain/emails:
-    $ref: 'sites/requests.yaml#/getDomainApproverEmails'
-  /sites/configure:
-    $ref: 'sites/requests.yaml#/modifySiteConfig'
-  /performance/response-headers:
-    $ref: 'sites/requests.yaml#/modifyResponseHeaders'
-  /performance/response-headers/get:
-    $ref: 'sites/requests.yaml#/getResponseHeaders'
-  /performance/tag-response:
-    $ref: 'sites/requests.yaml#/modifyTaggedResponseHeader'
-  /performance/tag-response/get:
-    $ref: 'sites/requests.yaml#/getTaggedResponseHeader'
-  /hostname/purge:
-    $ref: 'sites/requests.yaml#/purgeHostname'
-  /xray/get-link:
-    $ref: 'sites/requests.yaml#/getXrayLink'
-  /caching-rules/add:
-    $ref: 'sites/requests.yaml#/addCacheRule'
+  "/caching-rules/add":
+    post:
+      tags:
+      - Site
+      summary: Add cache rule
+      description: Use this operation to add a cache rule
+      operationId: addCacheRule
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              - host_name
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                host_name:
+                  description: The hostname to purge from the cache
+                  type: string
+      responses:
+        200:
+          "$ref": "#/components/responses/GenericResponse"
+  "/performance/response-headers":
+    post:
+      tags:
+      - Site
+      summary: Modify cached response headers
+      description: Use this operation to modify cached response headers
+      operationId: modifyResponseHeaders
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                cache_headers:
+                  description: Comma separated list of header names to be cached
+                  type: string
+                cache_all_headers:
+                  description: Cache all response headers. Pass "true" or "false"
+                    in the value parameter. Cannot be selected together with cache_headers
+                  type: string
+      responses:
+        200:
+          "$ref": "#/components/responses/GenericResponse"
+  "/performance/response-headers/get":
+    post:
+      tags:
+      - Site
+      summary: Get cached response headers
+      description: Use this operation to get a site's cached response headers
+      operationId: getResponseHeaders
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                CustomResponseHeaders:
+                  value:
+                    enabled: 'true'
+                    mode: CUSTOM
+                    custom_headers:
+                    - header1
+                    - header2
+                    - header3
+                  summary: Custom Headers
+  "/performance/tag-response":
+    post:
+      tags:
+      - Site
+      summary: Tag the response according to the value of a header
+      description: Specify which origin response header contains the cache tags in
+        your resources
+      operationId: modifyTaggedResponseHeader
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              - header
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                header:
+                  description: 'Specify which origin response header contains the
+                    cache tags in your resources. default: ""'
+                  type: string
+      responses:
+        200:
+          "$ref": "#/components/responses/GenericResponse"
+  "/performance/tag-response/get":
+    post:
+      tags:
+      - Site
+      summary: Get Header to Tag Responses By
+      description: Use this operation to get the origin response header containing
+        the cache tags in your resources.
+      operationId: getTaggedResponseHeader
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  "/hostname/purge":
+    post:
+      tags:
+      - Site
+      summary: Purge hostname from cache
+      description: |-
+        Use this operation to purge the hostname from the cache.
+
+         This API is for customers who use the same CNAME provided by Imperva for multiple hostnames and would like to change the CNAME for a particular hostname. Purging the hostname is required for the CNAME change to take effect
+      operationId: purgeHostname
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - host_name
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                host_name:
+                  description: The hostname to purge from the cache
+                  type: string
+      responses:
+        200:
+          "$ref": "#/components/responses/GenericResponse"
+  "/xray/get-link":
+    post:
+      tags:
+      - Site
+      summary: Get XRay access link
+      description: Use this operation to get a URL that enables debug headers on a
+        specific site
+      operationId: getXrayLink
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  "/sites/status":
+    post:
+      tags:
+      - Site
+      summary: Get site status
+      description: Use this operation to get the status of a site
+      operationId: getStatus
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                tests:
+                  description: 'Optional tests to run on site before returning its
+                    status. A comma separated list of one of: domain_validation, services,
+                    dns. See detailed description below.'
+                  type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Site"
+  "/sites/add":
+    post:
+      tags:
+      - Site
+      summary: Add a new site to an account
+      description: If the site already exists, its status is returned
+      operationId: addSite
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - domain
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                domain:
+                  description: 'The domain name of the site. For example: www.example.com,
+                    hello.example.com, example.com'
+                  type: string
+                account_id:
+                  description: Numeric identifier of the account to operate on. If
+                    not specified, operation will be performed on the account identified
+                    by the authentication parameters
+                  type: integer
+                ref_id:
+                  description: Customer specific identifier for this operation
+                  type: string
+                send_site_setup_emails:
+                  description: If this value is "false", end users will not get emails
+                    about the add site process such as "DNS instructions" and "SSL
+                    setup"
+                  type: boolean
+                site_ip:
+                  description: Manually set the web server IP/CNAME
+                  type: string
+                force_ssl:
+                  description: If this value is "true", manually set the site to support
+                    SSL. This option is only available for sites with manually configured
+                    IP/CNAME and for specific accounts
+                  type: boolean
+                naked_domain_san:
+                  description: 'Use “true” to add the naked domain SAN to a www site’s
+                    SSL certificate. Default value: true'
+                  type: boolean
+                wildcard_san:
+                  description: 'Use “true” to add the wildcard SAN or “false” to add
+                    the full domain SAN to the site’s SSL certificate. Default value:
+                    true'
+                  type: boolean
+                log_level:
+                  description: Available only for customers that purchased the Logs
+                    Integration SKU. Sets the log reporting level for the site. Options
+                    are “full”, “security”, “none” and "default"
+                  type: string
+                logs_account_id:
+                  description: Available only for customers that purchased the Logs
+                    Integration SKU. Numeric identifier of the account that purchased
+                    the logs integration SKU and which collects the logs. If not specified,
+                    operation will be performed on the account identified by the authentication
+                    parameters
+                  type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Site"
+  "/domain/emails":
+    post:
+      tags:
+      - Site
+      summary: Get domain approver email addresses
+      description: Use this operation to get the list of email addresses that can
+        be used when adding an SSL site.
+      operationId: getDomainApproverEmails
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - domain
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                domain:
+                  description: 'The domain name of the site. For example: www.example.com,
+                    hello.example.com, example.com'
+                  type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  "/sites/configure":
+    post:
+      tags:
+      - Site
+      summary: Modify site configuration
+      description: Use this operation to change one of the basic configuration settings
+        of the site.
+      operationId: modifySiteConfig
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - api_id
+              - api_key
+              - site_id
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                param:
+                  description: Name of configuration parameter to set
+                  type: string
+                value:
+                  description: According to the param value
+                  type: string
+      responses:
+        200:
+          "$ref": "#/components/responses/GenericResponse"
+components:
+  schemas:
+    GenericResponse:
+      type: object
+      required:
+      - res
+      - res_message
+      properties:
+        res:
+          type: integer
+        res_message:
+          type: string
+        debug_info:
+          type: object
+    Site:
+      type: object
+      required:
+      - api_id
+      - api_key
+      - site_id
+      - status
+      - domain
+      properties:
+        api_id:
+          description: API authentication identifier
+          type: string
+        api_key:
+          description: API authentication identifier
+          type: string
+        site_id:
+          type: integer
+        status:
+          type: string
+        statusEnum:
+          type: string
+        domain:
+          type: string
+        account_id:
+          type: integer
+        acceleration_level:
+          type: string
+        site_creation_date:
+          type: integer
+        ips:
+          type: array
+          items:
+            type: string
+        dns:
+          type: array
+          items:
+            type: object
+        original_dns:
+          type: array
+          items:
+            type: object
+        warnings:
+          type: array
+          items:
+            type: object
+        active:
+          type: string
+        support_all_tls_versions:
+          type: boolean
+        use_wildcard_san_instead_of_full_domain_san:
+          type: boolean
+        add_naked_domain_san:
+          type: boolean
+        additionalErrors:
+          type: array
+          items:
+            type: object
+        display_name:
+          type: string
+        security:
+          type: object
+        sealLocation:
+          type: object
+        ssl:
+          type: object
+        siteDualFactorSettings:
+          type: object
+        login_protect:
+          type: object
+        performance_configuration:
+          type: object
+        extended_ddos:
+          type: integer
+  responses:
+    GenericResponse:
+      description: Generic response
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/GenericResponse"
+          examples:
+            Success:
+              value:
+                res: 0
+                res_message: OK
+              summary: Success
+            Error:
+              value:
+                res: 1111
+                res_message: Error Message with details
+                debug_info:
+                  id-info: 12345
+              summary: Error

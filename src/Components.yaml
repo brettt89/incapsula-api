@@ -1,0 +1,36 @@
+components:
+  schemas:
+    GenericResponse:
+      type: object
+      required:
+        - res
+        - res_message
+      properties:
+        res:
+          type: integer
+        res_message:
+          type: string
+        debug_info:
+          type: object
+
+  responses:
+    GenericResponse:
+      description: Generic response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericResponse'
+          examples:
+            Success:
+              value:
+                res: 0
+                res_message: "OK"
+              summary: Success
+            Error:
+              value:
+                res: 1111
+                res_message: Error Message with details
+                debug_info: 
+                  id-info: 12345
+              summary: Error
+              

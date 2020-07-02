@@ -1,0 +1,17 @@
+openapi: 3.0.2
+info:
+  title: Imperva APIv1
+  description: Imperva APIv1
+  version: 0.0.1
+  contact:
+    email: brett.tasker@gmail.com
+externalDocs:
+  description: Imperva APIv1 Documentation
+  url: /docs
+servers: 
+  - url: https://my.imperva.com/api/prov/v1
+tags:
+paths:
+components:
+  schemas:
+  responses:

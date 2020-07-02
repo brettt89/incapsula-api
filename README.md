@@ -31,6 +31,26 @@ $ docker run -d -p 80:8080 -e SWAGGER_JSON=/app/IncapsulaAPIv1.yaml -v ${PWD}:/a
 
 Contributions are welcome. Please ensure all contributions are created as pull-requests to be merged into `master`.
 
+### Requirements for building
+
+ - [Docker](https://www.docker.com)
+
+### File structure
+
+All source files are contained within the [src/](./src/) directory. Files are required to follow a specific naming structure to ensure they are consumed by the building script.
+
+ - `Paths.yaml`: Defined paths for Imperva API endpoints.
+ - `Components.yaml`: Defined components that are consumed by other resources.
+ - `Base.yaml`: (Must be located in [src/](./src/) directory) Base information, tags, Security and structure for Monolithic YAML file.
+
+### Building IncapsulaAPIv1.yaml
+
+The `build.sh` script compiles all YAML files into a single Monolithic YAML file [IncapsulaAPIv1.yaml](./IncapsulaAPIv1.yaml). This is done to support a larger range of consumers of OpenAPI specifications as not all systems support mutli-file YAML implementations.
+
+```
+$ ./build.sh
+```
+
 ## Author
 
 brett.tasker@gmail.com

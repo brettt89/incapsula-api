@@ -1,0 +1,35 @@
+paths:
+  /caching-rules/add:
+    post:
+      tags:
+        - Site
+      summary: Add cache rule
+      description: Use this operation to add a cache rule
+      operationId: addCacheRule
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - api_id
+                - api_key
+                - site_id
+                - host_name
+              properties:
+                api_id:
+                  description: API authentication identifier
+                  type: string
+                api_key:
+                  description: API authentication identifier
+                  type: string
+                site_id:
+                  description: Numeric identifier of the site to operate on
+                  type: integer
+                host_name:
+                  description: The hostname to purge from the cache
+                  type: string
+      responses:
+        200:
+          $ref: '#/components/responses/GenericResponse'
