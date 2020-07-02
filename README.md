@@ -24,7 +24,14 @@ Then run `composer install`
 [Swagger UI](https://swagger.io/tools/swagger-ui/) is a tool to visualize and interact with OpenAPI Specifications. This example will use the [swaggerapi/swagger-ui](https://hub.docker.com/r/swaggerapi/swagger-ui/) Docker image to generate the Swagger UI web interface.
 
 ```bash
-$ docker run -d -p 80:8080 -e SWAGGER_JSON=/app/IncapsulaAPIv1.yaml -v ${PWD}:/app swaggerapi/swagger-ui
+$ docker run -p 80:8080 -e URL="https://raw.githubusercontent.com/brettt89/incapsula-api/master/IncapsulaAPIv1.yaml" swaggerapi/swagger-ui
+```
+
+Or to run locally:
+
+```bash
+$ git clone git@github.com:brettt89/incapsula-api.git
+$ docker run -d -p 80:8080 -e SWAGGER_JSON=/app/IncapsulaAPIv1.yaml -v ${PWD}/incapsula-api:/app swaggerapi/swagger-ui
 ```
 
 ## Contribution
@@ -48,6 +55,8 @@ All source files are contained within the [src/](./src/) directory. Files are re
 The `build.sh` script compiles all YAML files into a single Monolithic YAML file [IncapsulaAPIv1.yaml](./IncapsulaAPIv1.yaml). This is done to support a larger range of consumers of OpenAPI specifications as not all systems support mutli-file YAML implementations.
 
 ```
+$ git clone git@github.com:brettt89/incapsula-api.git
+$ cd incapsula-api/
 $ ./build.sh
 ```
 
